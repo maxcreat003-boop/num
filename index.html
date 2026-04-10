@@ -103,12 +103,11 @@ body{
 }
 .logo-box svg{width:18px;height:18px}
 .logo-t h1{
-    font-size:1.15rem;font-weight:800;line-height:1.2;
+    font-size:.85rem;font-weight:700;line-height:1.2;
     background:linear-gradient(135deg,#fff 0%,#a5b4fc 100%);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     background-clip:text;letter-spacing:-.02em;
 }
-.logo-s{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
 
 .head-btns{display:flex;align-items:center;gap:6px}
 .st-pill{
@@ -304,93 +303,45 @@ body{
 .copied{animation:cf .5s ease}
 @keyframes cf{0%{background:rgba(16,185,129,.2)}100%{background:var(--glass)}}
 
-/* ═══ LEFT PANEL — NUMBER CARDS ═══ */
-.left-panel{
-    flex:1;min-height:100vh;
-    display:flex;flex-direction:column;
-    padding:30px 30px 30px 40px;
-    overflow-y:auto;
-}
-.lp-head{
-    margin-bottom:24px;
-}
-.lp-title{
-    font-size:1.4rem;font-weight:800;
-    background:linear-gradient(135deg,#fff,rgba(255,255,255,.5));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;letter-spacing:-.02em;
-    margin-bottom:4px;
-}
-.lp-sub{
-    font-size:.72rem;color:var(--muted);
-    text-transform:uppercase;letter-spacing:.1em;font-weight:600;
-}
-.lp-count{
-    display:inline-block;padding:3px 10px;border-radius:var(--rp);
-    background:var(--glass);border:1px solid var(--border);
-    font-size:.7rem;font-weight:600;color:var(--accent);
-    font-family:'JetBrains Mono',monospace;
-    margin-left:8px;vertical-align:middle;
-}
-.num-grid{
-    display:flex;flex-wrap:wrap;gap:10px;
-    align-content:flex-start;
-}
-.num-card{
-    padding:10px 16px;border-radius:12px;
-    background:var(--glass);border:1px solid var(--border);
-    backdrop-filter:blur(16px);
-    font-family:'JetBrains Mono',monospace;
-    font-size:.78rem;font-weight:600;
-    color:var(--text);letter-spacing:.03em;
-    cursor:pointer;transition:all var(--base);
-    display:flex;align-items:center;gap:6px;
-    white-space:nowrap;
-    animation:numIn .4s cubic-bezier(.34,1.56,.64,1) both;
-}
-.num-card:hover{
-    background:var(--bg-hover);border-color:var(--border-h);
-    transform:translateY(-2px) scale(1.03);
-    box-shadow:0 8px 25px rgba(0,0,0,.3),0 0 15px var(--accent-g);
-}
-.num-card:active{transform:scale(.97)}
-.num-card .plus{
-    color:var(--green);font-weight:700;font-size:.9rem;
-}
-.num-card .flag{
-    font-size:.85rem;line-height:1;
-}
-.num-card.copied-num{
-    border-color:var(--green);
-    box-shadow:0 0 20px var(--green-g);
-}
-@keyframes numIn{
-    from{opacity:0;transform:translateY(10px) scale(.95)}
-    to{opacity:1;transform:translateY(0) scale(1)}
-}
-
-/* Number card separator labels */
-.num-section{
-    width:100%;margin:16px 0 8px;
-    padding-bottom:6px;
-    border-bottom:1px solid var(--border);
-    font-size:.65rem;color:var(--muted);
-    text-transform:uppercase;letter-spacing:.1em;font-weight:600;
-    display:flex;align-items:center;gap:8px;
-}
-.num-section svg{width:14px;height:14px;color:var(--accent);}
+/* ═══ LEFT PANEL ═══ */
+.left-panel{flex:1;min-height:100vh;display:flex;flex-direction:column;padding:16px 20px 16px 24px;overflow-y:auto}
+.left-panel::-webkit-scrollbar{width:4px}
+.left-panel::-webkit-scrollbar-thumb{background:var(--glass2);border-radius:2px}
+.lp-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.lp-title{font-size:1.1rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+.lp-count{padding:2px 8px;border-radius:var(--rp);background:var(--glass);border:1px solid var(--border);font-size:.65rem;font-weight:600;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.lp-acts{display:flex;gap:6px}
+.bot-cfg,.add-cfg{padding:10px 14px;border-radius:10px;background:var(--glass);border:1px solid var(--border);margin-bottom:10px;flex-shrink:0}
+.bot-input,.add-ta{width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.3);color:#fff;font-family:'JetBrains Mono',monospace;font-size:.75rem;outline:none;margin-bottom:8px;resize:none}
+.bot-input:focus,.add-ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
+.bot-row{display:flex;align-items:center;gap:10px}
+.bot-st{font-size:.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.btn-sm{padding:6px 14px;border-radius:8px;border:none;font-size:.72rem;font-weight:600;cursor:pointer;transition:all var(--base);font-family:'Inter',sans-serif}
+.btn-sm.green{background:rgba(16,185,129,.2);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.btn-sm.green:hover{background:rgba(16,185,129,.35)}
+.btn-sm.red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.date-sec{margin-bottom:16px}
+.date-hdr{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.date-hdr svg{width:13px;height:13px;color:var(--accent)}
+.country-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.country-card{flex:0 0 auto;width:220px;border-radius:14px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);overflow:hidden;transition:all var(--base)}
+.country-card:hover{border-color:var(--border-h)}
+.cc-head{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+.cc-flag{font-size:1.2rem;margin-right:6px}
+.cc-name{font-size:.75rem;font-weight:700;color:#fff;flex:1}
+.cc-cnt{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:2px 6px;border-radius:var(--rp);background:var(--glass)}
+.cc-list{max-height:260px;overflow-y:auto;padding:4px 0}
+.cc-list::-webkit-scrollbar{width:3px}
+.cc-list::-webkit-scrollbar-thumb{background:var(--glass2);border-radius:2px}
+.cc-num{padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--dim);cursor:pointer;transition:all var(--fast);display:flex;align-items:center;gap:5px;border-bottom:1px solid rgba(255,255,255,.03)}
+.cc-num:last-child{border-bottom:none}
+.cc-num:hover{background:var(--bg-hover);color:#fff}
+.cc-num .plus{color:var(--green);font-weight:700;font-size:.8rem}
+.cc-num.copied-num{background:rgba(16,185,129,.1);color:var(--green)}
 
 /* ═══ RESPONSIVE ═══ */
-@media(max-width:600px){
-    .layout{flex-direction:column}
-    .left-panel{display:none}
-    .right-panel{width:100%;max-width:none;min-width:unset;border-left:none}
-}
-@media(max-width:480px){
-    .stats-row{grid-template-columns:repeat(2,1fr)}
-    .pills{flex-wrap:wrap}
-    .msg{padding:12px 14px}
-}
+@media(max-width:600px){.layout{flex-direction:column}.left-panel{display:none}.right-panel{width:100%;max-width:none;min-width:unset;border-left:none}}
+@media(max-width:480px){.stats-row{grid-template-columns:repeat(2,1fr)}.pills{flex-wrap:wrap}.msg{padding:12px 14px}}
 
 ::selection{background:rgba(99,102,241,.3);color:#fff}
 </style>
@@ -403,15 +354,13 @@ body{
 </div>
 
 <div class="layout">
-    <!-- LEFT PANEL — Number Cards -->
+    <!-- LEFT PANEL — Number Management -->
     <div class="left-panel" id="leftPanel">
-        <div class="lp-head">
-            <div class="lp-title">Active Numbers <span class="lp-count" id="numCount">0</span></div>
-            <div class="lp-sub">Click to copy · Auto-updated from feed</div>
+        <div class="lp-bar">
+            <div class="lp-title">Numbers <span class="lp-count" id="numCount">0</span></div>
         </div>
-        <div class="num-grid" id="numGrid">
-            <!-- Numbers auto-populate from feed -->
-        </div>
+        <!-- Number Groups render here -->
+        <div class="num-groups" id="numGroups"></div>
     </div>
 
     <!-- RIGHT PANEL — SMS Dashboard -->
@@ -420,12 +369,8 @@ body{
         <div class="panel-head">
             <div class="panel-top">
                 <div class="logo-row">
-                    <div class="logo-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    </div>
                     <div class="logo-t">
                         <h1>Secured by Core</h1>
-                        <span class="logo-s">Real-time Feed</span>
                     </div>
                 </div>
                 <div class="head-btns">
@@ -442,13 +387,7 @@ body{
                 </div>
             </div>
 
-            <!-- Mini Stats -->
-            <div class="stats-row">
-                <div class="st-card"><span class="sv" id="sT">0</span><span class="sl">Messages</span></div>
-                <div class="st-card"><span class="sv" id="sL">--:--</span><span class="sl">Latest</span></div>
-                <div class="st-card"><span class="sv" id="sS">--</span><span class="sl">Source</span></div>
-                <div class="st-card"><span class="sv" id="sR">0</span><span class="sl">Refreshes</span></div>
-            </div>
+
 
             <!-- Search + Filters -->
             <div class="search-row">
@@ -513,7 +452,11 @@ const el={
     pBar:$('#pBar'),loader:$('#loader'),
     empty:$('#emMsg'),list:$('#mList'),
     scroll:$('#msgScroll'),toasts:$('#toasts'),
-    numGrid:$('#numGrid'),numCount:$('#numCount'),
+    numGroups:$('#numGroups'),numCount:$('#numCount'),
+    addBtn:$('#addBtn'),botBtn:$('#botBtn'),
+    botCfg:$('#botCfg'),addCfg:$('#addCfg'),
+    botToken:$('#botToken'),botSave:$('#botSave'),botSt:$('#botSt'),
+    addNums:$('#addNums'),addSave:$('#addSave'),
 };
 el.pillTxt=el.pill.querySelector('.st-txt');
 
@@ -569,36 +512,17 @@ function proc(d){
     else if(d&&d.value&&Array.isArray(d.value)) arr=d.value;
     else return;
     if(!arr.length) return;
-    const nm=arr.map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
+    const nm=arr.slice(0,25).map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
     const ci=new Set(nm.map(m=>m.id));
     const fr=[];
     if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)beep();}}
     prev=ci;msgs=nm;
     if(first){el.loader.classList.add('h');first=false;}
     render(fr);
-    renderNums();
-    // Auto scroll to top when new messages arrive
     if(fr.length>0){el.scroll.scrollTo({top:0,behavior:'smooth'});}
 }
 
-// ═══ LEFT PANEL: Render unique numbers ═══
-let prevNums='';
-function renderNums(){
-    const unique=[...new Set(msgs.map(m=>m.phone))].filter(Boolean);
-    const key=unique.join(',');
-    if(key===prevNums) return; // no change
-    prevNums=key;
-    el.numCount.textContent=unique.length;
-    let html='';
-    unique.forEach((num,i)=>{
-        const display=num.length>10?num.slice(0,3)+' '+num.slice(3,7)+' '+num.slice(7):num;
-        html+=`<div class="num-card" data-num="+${num}" onclick="cpNum(this)" style="animation-delay:${i*.05}s">`;
-        html+=`<span class="plus">+</span>`;
-        html+=`<span>${display}</span>`;
-        html+=`</div>`;
-    });
-    el.numGrid.innerHTML=html;
-}
+
 
 function render(fr=[]){
     const fm=filt();
@@ -661,18 +585,170 @@ function bind(){
     el.pills.forEach(p=>{p.addEventListener('click',()=>{el.pills.forEach(x=>x.classList.remove('active'));p.classList.add('active');filter=p.dataset.f;render()})});
 }
 
-function slp(ms){return new Promise(r=>setTimeout(r,ms))}
-async function init(){bind();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s')}
 // Expose for global onclick handlers
 window._clip=clip;window._toast=toast;
+
+// ═══ COUNTRY CODE MAP ═══
+const CC={
+'1':{n:'USA/Canada',f:'🇺🇸'},'7':{n:'Russia',f:'🇷🇺'},'20':{n:'Egypt',f:'🇪🇬'},'27':{n:'South Africa',f:'🇿🇦'},
+'30':{n:'Greece',f:'🇬🇷'},'31':{n:'Netherlands',f:'🇳🇱'},'33':{n:'France',f:'🇫🇷'},'34':{n:'Spain',f:'🇪🇸'},
+'39':{n:'Italy',f:'🇮🇹'},'44':{n:'United Kingdom',f:'🇬🇧'},'49':{n:'Germany',f:'🇩🇪'},'51':{n:'Peru',f:'🇵🇪'},
+'52':{n:'Mexico',f:'🇲🇽'},'53':{n:'Cuba',f:'🇨🇺'},'54':{n:'Argentina',f:'🇦🇷'},'55':{n:'Brazil',f:'🇧🇷'},
+'56':{n:'Chile',f:'🇨🇱'},'57':{n:'Colombia',f:'🇨🇴'},'58':{n:'Venezuela',f:'🇻🇪'},'60':{n:'Malaysia',f:'🇲🇾'},
+'61':{n:'Australia',f:'🇦🇺'},'62':{n:'Indonesia',f:'🇮🇩'},'63':{n:'Philippines',f:'🇵🇭'},'65':{n:'Singapore',f:'🇸🇬'},
+'66':{n:'Thailand',f:'🇹🇭'},'81':{n:'Japan',f:'🇯🇵'},'82':{n:'South Korea',f:'🇰🇷'},'84':{n:'Vietnam',f:'🇻🇳'},
+'86':{n:'China',f:'🇨🇳'},'90':{n:'Turkey',f:'🇹🇷'},'91':{n:'India',f:'🇮🇳'},'92':{n:'Pakistan',f:'🇵🇰'},
+'93':{n:'Afghanistan',f:'🇦🇫'},'94':{n:'Sri Lanka',f:'🇱🇰'},'98':{n:'Iran',f:'🇮🇷'},
+'212':{n:'Morocco',f:'🇲🇦'},'213':{n:'Algeria',f:'🇩🇿'},'216':{n:'Tunisia',f:'🇹🇳'},
+'220':{n:'Gambia',f:'🇬🇲'},'221':{n:'Senegal',f:'🇸🇳'},'223':{n:'Mali',f:'🇲🇱'},'224':{n:'Guinea',f:'🇬🇳'},
+'225':{n:'Ivory Coast',f:'🇨🇮'},'226':{n:'Burkina Faso',f:'🇧🇫'},'227':{n:'Niger',f:'🇳🇪'},
+'228':{n:'Togo',f:'🇹🇬'},'229':{n:'Benin',f:'🇧🇯'},'233':{n:'Ghana',f:'🇬🇭'},'234':{n:'Nigeria',f:'🇳🇬'},
+'237':{n:'Cameroon',f:'🇨🇲'},'243':{n:'DR Congo',f:'🇨🇩'},'244':{n:'Angola',f:'🇦🇴'},
+'254':{n:'Kenya',f:'🇰🇪'},'255':{n:'Tanzania',f:'🇹🇿'},'256':{n:'Uganda',f:'🇺🇬'},
+'260':{n:'Zambia',f:'🇿🇲'},'263':{n:'Zimbabwe',f:'🇿🇼'},'351':{n:'Portugal',f:'🇵🇹'},
+'353':{n:'Ireland',f:'🇮🇪'},'355':{n:'Albania',f:'🇦🇱'},'358':{n:'Finland',f:'🇫🇮'},
+'370':{n:'Lithuania',f:'🇱🇹'},'380':{n:'Ukraine',f:'🇺🇦'},'420':{n:'Czech Republic',f:'🇨🇿'},
+'502':{n:'Guatemala',f:'🇬🇹'},'503':{n:'El Salvador',f:'🇸🇻'},'504':{n:'Honduras',f:'🇭🇳'},
+'505':{n:'Nicaragua',f:'🇳🇮'},'506':{n:'Costa Rica',f:'🇨🇷'},'507':{n:'Panama',f:'🇵🇦'},
+'509':{n:'Haiti',f:'🇭🇹'},'591':{n:'Bolivia',f:'🇧🇴'},'593':{n:'Ecuador',f:'🇪🇨'},
+'595':{n:'Paraguay',f:'🇵🇾'},'598':{n:'Uruguay',f:'🇺🇾'},
+'852':{n:'Hong Kong',f:'🇭🇰'},'855':{n:'Cambodia',f:'🇰🇭'},'880':{n:'Bangladesh',f:'🇧🇩'},
+'886':{n:'Taiwan',f:'🇹🇼'},'960':{n:'Maldives',f:'🇲🇻'},'961':{n:'Lebanon',f:'🇱🇧'},
+'962':{n:'Jordan',f:'🇯🇴'},'964':{n:'Iraq',f:'🇮🇶'},'966':{n:'Saudi Arabia',f:'🇸🇦'},
+'971':{n:'UAE',f:'🇦🇪'},'972':{n:'Israel',f:'🇮🇱'},'974':{n:'Qatar',f:'🇶🇦'},
+'977':{n:'Nepal',f:'🇳🇵'},'992':{n:'Tajikistan',f:'🇹🇯'},'998':{n:'Uzbekistan',f:'🇺🇿'},
+};
+function detectCC(num){
+    const n=num.replace(/\D/g,'');
+    for(const len of [3,2,1]){const c=n.slice(0,len);if(CC[c])return{code:c,...CC[c]};}
+    return{code:n.slice(0,2),n:'Unknown',f:'🌐'};
+}
+
+// ═══ NUMBER STORAGE (localStorage) ═══
+const STORE_KEY='core_numbers';
+function loadNums(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch{return {}}}
+function saveNums(d){localStorage.setItem(STORE_KEY,JSON.stringify(d))}
+function todayKey(){return new Date().toISOString().slice(0,10)}
+
+function addNumbers(raw){
+    const lines=raw.split(/[\n,]+/).map(l=>l.replace(/[^0-9]/g,'')).filter(l=>l.length>=7);
+    if(!lines.length)return 0;
+    const data=loadNums();const dk=todayKey();
+    if(!data[dk])data[dk]={};
+    let added=0;
+    for(const num of lines){
+        const cc=detectCC(num);
+        if(!data[dk][cc.code])data[dk][cc.code]=[];
+        if(!data[dk][cc.code].includes(num)){data[dk][cc.code].unshift(num);added++;}
+    }
+    saveNums(data);renderNumPanel();return added;
+}
+
+function deleteNum(date,cc,num){
+    const data=loadNums();
+    if(data[date]&&data[date][cc]){
+        data[date][cc]=data[date][cc].filter(n=>n!==num);
+        if(!data[date][cc].length)delete data[date][cc];
+        if(!Object.keys(data[date]).length)delete data[date];
+        saveNums(data);renderNumPanel();
+    }
+}
+
+function renderNumPanel(){
+    const data=loadNums();
+    const dates=Object.keys(data).sort().reverse();
+    let total=0;
+    dates.forEach(d=>Object.values(data[d]).forEach(arr=>total+=arr.length));
+    el.numCount.textContent=total;
+    if(!dates.length){el.numGroups.innerHTML='<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:.8rem">No numbers added yet.<br>Use + or Telegram bot to add.</div>';return;}
+    let html='';
+    const today=todayKey();
+    for(const date of dates){
+        const label=date===today?'📅 Today — '+date:('📅 '+date);
+        html+=`<div class="date-sec"><div class="date-hdr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${label}</div><div class="country-row">`;
+        const ccs=Object.keys(data[date]);
+        for(const cc of ccs){
+            const info=CC[cc]||{n:'Unknown',f:'🌐'};
+            const nums=data[date][cc];
+            html+=`<div class="country-card"><div class="cc-head"><span class="cc-flag">${info.f}</span><span class="cc-name">${info.n}</span><span class="cc-cnt">${nums.length}</span></div><div class="cc-list">`;
+            for(const num of nums){
+                const disp=num.length>10?num.slice(0,3)+' '+num.slice(3,7)+' '+num.slice(7):num;
+                html+=`<div class="cc-num" onclick="cpNum(this)" data-num="+${num}" data-date="${date}" data-cc="${cc}"><span class="plus">+</span><span>${disp}</span></div>`;
+            }
+            html+=`</div></div>`;
+        }
+        html+=`</div></div>`;
+    }
+    el.numGroups.innerHTML=html;
+}
+
+// ═══ TELEGRAM BOT POLLING ═══
+const BOT_KEY='core_bot_token';
+let botTimer=null,botOffset=0;
+function loadBot(){return localStorage.getItem(BOT_KEY)||''}
+function saveBot(t){localStorage.setItem(BOT_KEY,t)}
+
+async function pollBot(){
+    const token=loadBot();if(!token)return;
+    try{
+        const r=await fetch(`https://api.telegram.org/bot${token}/getUpdates?offset=${botOffset}&timeout=1`);
+        const d=await r.json();
+        if(!d.ok)throw new Error(d.description);
+        el.botSt.textContent='🟢 Connected';el.botSt.style.color='var(--green)';
+        if(d.result&&d.result.length){
+            for(const u of d.result){
+                botOffset=u.update_id+1;
+                if(u.message&&u.message.text){
+                    const txt=u.message.text;
+                    if(txt.startsWith('/start')){
+                        await tgSend(token,u.message.chat.id,'✅ Connected to Core Dashboard!\nSend numbers (one per line) to add them.');
+                        continue;
+                    }
+                    const count=addNumbers(txt);
+                    if(count>0)await tgSend(token,u.message.chat.id,`✅ Added ${count} number${count>1?'s':''} to today's list.`);
+                    else await tgSend(token,u.message.chat.id,'⚠️ No valid numbers found. Send numbers one per line.');
+                }
+            }
+        }
+    }catch(e){
+        console.error('Bot error:',e.message);
+        el.botSt.textContent='🔴 Error';el.botSt.style.color='var(--red)';
+    }
+}
+async function tgSend(token,chatId,text){
+    try{await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:text})})}catch(e){}
+}
+function startBot(){stopBot();const t=loadBot();if(!t)return;botTimer=setInterval(pollBot,4000);pollBot()}
+function stopBot(){if(botTimer){clearInterval(botTimer);botTimer=null}}
+
+// ═══ LEFT PANEL BINDINGS ═══
+function bindLP(){
+    el.addBtn.addEventListener('click',()=>{el.addCfg.classList.toggle('h');el.botCfg.classList.add('h')});
+    el.botBtn.addEventListener('click',()=>{el.botCfg.classList.toggle('h');el.addCfg.classList.add('h');el.botToken.value=loadBot()});
+    el.addSave.addEventListener('click',()=>{
+        const txt=el.addNums.value.trim();
+        if(!txt){toast('error','Paste numbers first');return;}
+        const c=addNumbers(txt);
+        toast('success',c+' number'+(c>1?'s':'')+' added!');
+        el.addNums.value='';el.addCfg.classList.add('h');
+    });
+    el.botSave.addEventListener('click',()=>{
+        const t=el.botToken.value.trim();
+        if(!t){toast('error','Enter bot token');return;}
+        saveBot(t);startBot();toast('success','Bot connected!');
+    });
+}
+
+function slp(ms){return new Promise(r=>setTimeout(r,ms))}
+async function init(){bind();bindLP();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 
-// Global: copy number from left panel cards
+// Global handlers
 function cpNum(el){
     const num=el.dataset.num;
     window._clip(num);
-    window._toast('success','Number '+num+' copied!');
+    window._toast('success',num+' copied!');
     el.classList.add('copied-num');
     setTimeout(()=>el.classList.remove('copied-num'),800);
 }
