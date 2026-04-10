@@ -304,6 +304,82 @@ body{
 .copied{animation:cf .5s ease}
 @keyframes cf{0%{background:rgba(16,185,129,.2)}100%{background:var(--glass)}}
 
+/* ═══ LEFT PANEL — NUMBER CARDS ═══ */
+.left-panel{
+    flex:1;min-height:100vh;
+    display:flex;flex-direction:column;
+    padding:30px 30px 30px 40px;
+    overflow-y:auto;
+}
+.lp-head{
+    margin-bottom:24px;
+}
+.lp-title{
+    font-size:1.4rem;font-weight:800;
+    background:linear-gradient(135deg,#fff,rgba(255,255,255,.5));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;letter-spacing:-.02em;
+    margin-bottom:4px;
+}
+.lp-sub{
+    font-size:.72rem;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.1em;font-weight:600;
+}
+.lp-count{
+    display:inline-block;padding:3px 10px;border-radius:var(--rp);
+    background:var(--glass);border:1px solid var(--border);
+    font-size:.7rem;font-weight:600;color:var(--accent);
+    font-family:'JetBrains Mono',monospace;
+    margin-left:8px;vertical-align:middle;
+}
+.num-grid{
+    display:flex;flex-wrap:wrap;gap:10px;
+    align-content:flex-start;
+}
+.num-card{
+    padding:10px 16px;border-radius:12px;
+    background:var(--glass);border:1px solid var(--border);
+    backdrop-filter:blur(16px);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;font-weight:600;
+    color:var(--text);letter-spacing:.03em;
+    cursor:pointer;transition:all var(--base);
+    display:flex;align-items:center;gap:6px;
+    white-space:nowrap;
+    animation:numIn .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+.num-card:hover{
+    background:var(--bg-hover);border-color:var(--border-h);
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 8px 25px rgba(0,0,0,.3),0 0 15px var(--accent-g);
+}
+.num-card:active{transform:scale(.97)}
+.num-card .plus{
+    color:var(--green);font-weight:700;font-size:.9rem;
+}
+.num-card .flag{
+    font-size:.85rem;line-height:1;
+}
+.num-card.copied-num{
+    border-color:var(--green);
+    box-shadow:0 0 20px var(--green-g);
+}
+@keyframes numIn{
+    from{opacity:0;transform:translateY(10px) scale(.95)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Number card separator labels */
+.num-section{
+    width:100%;margin:16px 0 8px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--border);
+    font-size:.65rem;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.1em;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+}
+.num-section svg{width:14px;height:14px;color:var(--accent);}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:600px){
     .layout{flex-direction:column}
@@ -327,8 +403,16 @@ body{
 </div>
 
 <div class="layout">
-    <!-- LEFT PANEL — reserved / blank -->
-    <div class="left-panel" id="leftPanel"></div>
+    <!-- LEFT PANEL — Number Cards -->
+    <div class="left-panel" id="leftPanel">
+        <div class="lp-head">
+            <div class="lp-title">Active Numbers <span class="lp-count" id="numCount">0</span></div>
+            <div class="lp-sub">Click to copy · Auto-updated from feed</div>
+        </div>
+        <div class="num-grid" id="numGrid">
+            <!-- Numbers auto-populate from feed -->
+        </div>
+    </div>
 
     <!-- RIGHT PANEL — SMS Dashboard -->
     <div class="right-panel" id="rightPanel">
@@ -429,6 +513,7 @@ const el={
     pBar:$('#pBar'),loader:$('#loader'),
     empty:$('#emMsg'),list:$('#mList'),
     scroll:$('#msgScroll'),toasts:$('#toasts'),
+    numGrid:$('#numGrid'),numCount:$('#numCount'),
 };
 el.pillTxt=el.pill.querySelector('.st-txt');
 
@@ -491,8 +576,28 @@ function proc(d){
     prev=ci;msgs=nm;
     if(first){el.loader.classList.add('h');first=false;}
     render(fr);
+    renderNums();
     // Auto scroll to top when new messages arrive
     if(fr.length>0){el.scroll.scrollTo({top:0,behavior:'smooth'});}
+}
+
+// ═══ LEFT PANEL: Render unique numbers ═══
+let prevNums='';
+function renderNums(){
+    const unique=[...new Set(msgs.map(m=>m.phone))].filter(Boolean);
+    const key=unique.join(',');
+    if(key===prevNums) return; // no change
+    prevNums=key;
+    el.numCount.textContent=unique.length;
+    let html='';
+    unique.forEach((num,i)=>{
+        const display=num.length>10?num.slice(0,3)+' '+num.slice(3,7)+' '+num.slice(7):num;
+        html+=`<div class="num-card" data-num="+${num}" onclick="cpNum(this)" style="animation-delay:${i*.05}s">`;
+        html+=`<span class="plus">+</span>`;
+        html+=`<span>${display}</span>`;
+        html+=`</div>`;
+    });
+    el.numGrid.innerHTML=html;
 }
 
 function render(fr=[]){
@@ -557,9 +662,20 @@ function bind(){
 }
 
 function slp(ms){return new Promise(r=>setTimeout(r,ms))}
-async function init(){bind();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 4s')}
+async function init(){bind();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s')}
+// Expose for global onclick handlers
+window._clip=clip;window._toast=toast;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
+
+// Global: copy number from left panel cards
+function cpNum(el){
+    const num=el.dataset.num;
+    window._clip(num);
+    window._toast('success','Number '+num+' copied!');
+    el.classList.add('copied-num');
+    setTimeout(()=>el.classList.remove('copied-num'),800);
+}
 </script>
 
 </body>
