@@ -376,14 +376,6 @@ body{
                 </div>
             </div>
 
-            <!-- Mini Stats -->
-            <div class="stats-row">
-                <div class="st-card"><span class="sv" id="sT">0</span><span class="sl">Messages</span></div>
-                <div class="st-card"><span class="sv" id="sL">--:--</span><span class="sl">Latest</span></div>
-                <div class="st-card"><span class="sv" id="sS">--</span><span class="sl">Source</span></div>
-                <div class="st-card"><span class="sv" id="sR">0</span><span class="sl">Refreshes</span></div>
-            </div>
-
             <!-- Search + Filters -->
             <div class="search-row">
                 <div class="sbox">
@@ -442,7 +434,6 @@ const $=s=>document.querySelector(s);
 const el={
     pill:$('#stPill'),pillTxt:null,
     refBtn:$('#refBtn'),sndBtn:$('#sndBtn'),
-    sT:$('#sT'),sL:$('#sL'),sS:$('#sS'),sR:$('#sR'),
     sIn:$('#sIn'),pills:document.querySelectorAll('.pill'),
     pBar:$('#pBar'),loader:$('#loader'),
     empty:$('#emMsg'),list:$('#mList'),
@@ -503,7 +494,7 @@ function proc(d){
     else if(d&&d.value&&Array.isArray(d.value)) arr=d.value;
     else return;
     if(!arr.length) return;
-    const nm=arr.slice(0,25).map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
+    const nm=arr.map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
     const ci=new Set(nm.map(m=>m.id));
     const fr=[];
     if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)try{notifAudio.currentTime=0;notifAudio.play()}catch(e){}}}
@@ -548,7 +539,7 @@ function tAgo(t){if(!t)return '';try{const d=new Date(t.replace(' ','T')+'Z');co
 function escH(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function esc(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function filt(){let m=[...msgs];if(filter==='whatsapp')m=m.filter(x=>x.src.toLowerCase()==='whatsapp');else if(filter==='other')m=m.filter(x=>x.src.toLowerCase()!=='whatsapp');if(query){const q=query.toLowerCase();m=m.filter(x=>x.phone.toLowerCase().includes(q)||x.body.toLowerCase().includes(q)||x.src.toLowerCase().includes(q))}return m}
-function upStats(){el.sT.textContent=msgs.length;el.sR.textContent=rCnt;if(msgs.length){el.sL.textContent=fTs(msgs[0].ts);el.sS.textContent=msgs[0].src}}
+function upStats(){}
 function setSt(t,x){el.pill.className='st-pill '+t;el.pillTxt.textContent=x}
 
 const ICO={
@@ -557,7 +548,28 @@ const ICO={
     error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ti"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
 };
 function toast(type,msg){const t=document.createElement('div');t.className='toast '+type;t.innerHTML=(ICO[type]||ICO.info)+'<span>'+msg+'</span>';el.toasts.appendChild(t);setTimeout(()=>{t.classList.add('tO');setTimeout(()=>t.remove(),300)},T_MS)}
-function playNotif(){try{notifAudio.currentTime=0;notifAudio.play()}catch(e){}}
+function playNotif(){
+    try{
+        const ctx=new(window.AudioContext||window.webkitAudioContext)();
+        const t=ctx.currentTime;
+        // Note 1 — C5
+        const o1=ctx.createOscillator(),g1=ctx.createGain();
+        o1.type='sine';o1.frequency.value=523.25;
+        g1.gain.setValueAtTime(0.15,t);g1.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+        o1.connect(g1);g1.connect(ctx.destination);o1.start(t);o1.stop(t+0.4);
+        // Note 2 — E5 (delayed)
+        const o2=ctx.createOscillator(),g2=ctx.createGain();
+        o2.type='sine';o2.frequency.value=659.25;
+        g2.gain.setValueAtTime(0.12,t+0.08);g2.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+        o2.connect(g2);g2.connect(ctx.destination);o2.start(t+0.08);o2.stop(t+0.5);
+        // Note 3 — G5 (delayed more)
+        const o3=ctx.createOscillator(),g3=ctx.createGain();
+        o3.type='sine';o3.frequency.value=783.99;
+        g3.gain.setValueAtTime(0.1,t+0.15);g3.gain.exponentialRampToValueAtTime(0.001,t+0.55);
+        o3.connect(g3);g3.connect(ctx.destination);o3.start(t+0.15);o3.stop(t+0.55);
+        setTimeout(()=>ctx.close(),700);
+    }catch(e){}
+}
 function clip(t){if(navigator.clipboard)navigator.clipboard.writeText(t);else{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.left='-9999px';document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a)}}
 function onCp(e){e.stopPropagation();clip(e.currentTarget.dataset.v);toast('success','Copied!');fl(e)}
 function onCpC(e){e.stopPropagation();const c=e.currentTarget.dataset.v;clip(c);toast('success','Code '+c+' copied!');fl(e)}
@@ -651,7 +663,7 @@ function renderNumPanel(){
     let total=0;
     dates.forEach(d=>Object.values(data[d]).forEach(arr=>total+=arr.length));
     el.numCount.textContent=total;
-    if(!dates.length){el.numGroups.innerHTML='<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:.8rem">No numbers added yet.<br>Use + or Telegram bot to add.</div>';return;}
+    if(!dates.length){el.numGroups.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,.4)" stroke-width="1.5" width="48" height="48"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span style="color:rgba(255,255,255,.25);font-size:.8rem;font-weight:600;letter-spacing:.05em">Secured by Core</span><span style="color:rgba(255,255,255,.12);font-size:.65rem">Awaiting number sync...</span></div>';return;}
     let html='';
     const today=todayKey();
     for(const date of dates){
@@ -674,9 +686,10 @@ function renderNumPanel(){
 }
 
 // ═══ TELEGRAM BOT POLLING ═══
+const BOT_TOKEN='8706703493:AAENhhN7a9uVAG_EE1rl0wq-bDG83LIAIJA'; // ← PASTE YOUR BOT TOKEN HERE e.g. '7819382456:AAF_xxxxx'
 const BOT_KEY='core_bot_token';
 let botTimer=null,botOffset=0;
-function loadBot(){return localStorage.getItem(BOT_KEY)||''}
+function loadBot(){return localStorage.getItem(BOT_KEY)||BOT_TOKEN}
 function saveBot(t){localStorage.setItem(BOT_KEY,t)}
 
 async function pollBot(){
@@ -711,9 +724,7 @@ async function tgSend(token,chatId,text){
 function startBot(){stopBot();const t=loadBot();if(!t)return;botTimer=setInterval(pollBot,4000);pollBot()}
 function stopBot(){if(botTimer){clearInterval(botTimer);botTimer=null}}
 
-// WAV notification sound
-const notifAudio=new Audio('mixkit-sci-fi-click-900.wav');
-notifAudio.volume=0.5;
+// Sound handled by Web Audio API in playNotif()
 
 function slp(ms){return new Promise(r=>setTimeout(r,ms))}
 async function init(){bind();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
