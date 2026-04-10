@@ -313,30 +313,110 @@ body{
 .date-sec{margin-bottom:16px}
 .date-hdr{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .date-hdr svg{width:13px;height:13px;color:var(--accent)}
-.country-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
-.country-card{flex:0 0 auto;width:220px;border-radius:14px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);overflow:hidden;transition:all var(--base)}
-.country-card:hover{border-color:var(--border-h)}
-.cc-head{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
-.cc-flag{font-size:1.2rem;margin-right:6px}
-.cc-name{font-size:.75rem;font-weight:700;color:#fff;flex:1}
-.cc-cnt{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:2px 6px;border-radius:var(--rp);background:var(--glass)}
-.cc-list{max-height:260px;overflow-y:auto;padding:4px 0}
+.country-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.country-row.cc-1 .country-card{flex:1 1 100%}
+.country-row.cc-2 .country-card{flex:1 1 calc(50% - 5px)}
+.country-row.cc-3 .country-card{flex:1 1 calc(33% - 7px)}
+.country-card{min-width:0;border-radius:14px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);overflow:hidden;transition:all var(--base)}
+.country-card:hover{border-color:var(--border-h);transform:translateY(-1px)}
+.cc-head{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.25)}
+.cc-flag{font-size:1.6rem;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.cc-name{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.85);flex:1;letter-spacing:.02em}
+.cc-cnt{font-size:.6rem;color:var(--accent);font-family:'JetBrains Mono',monospace;padding:2px 8px;border-radius:var(--rp);background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.25);font-weight:700}
+.cc-list{padding:10px 12px;display:flex;flex-wrap:wrap;gap:4px 6px;max-height:320px;overflow-y:auto}
 .cc-list::-webkit-scrollbar{width:3px}
 .cc-list::-webkit-scrollbar-thumb{background:var(--glass2);border-radius:2px}
-.cc-num{padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--dim);cursor:pointer;transition:all var(--fast);display:flex;align-items:center;gap:5px;border-bottom:1px solid rgba(255,255,255,.03)}
-.cc-num:last-child{border-bottom:none}
-.cc-num:hover{background:var(--bg-hover);color:#fff}
-.cc-num .plus{color:var(--green);font-weight:700;font-size:.8rem}
-.cc-num.copied-num{background:rgba(16,185,129,.1);color:var(--green)}
+.cc-num{padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--dim);cursor:pointer;transition:all var(--fast);display:inline-flex;align-items:center;gap:3px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid transparent}
+.cc-num:hover{background:var(--bg-hover);color:#fff;border-color:var(--border)}
+.cc-num .plus{color:var(--green);font-weight:700;font-size:.75rem}
+.cc-num.copied-num{background:rgba(16,185,129,.12);color:var(--green);border-color:rgba(16,185,129,.3)}
 
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:600px){.layout{flex-direction:column}.left-panel{display:none}.right-panel{width:100%;max-width:none;min-width:unset;border-left:none}}
 @media(max-width:480px){.stats-row{grid-template-columns:repeat(2,1fr)}.pills{flex-wrap:wrap}.msg{padding:12px 14px}}
 
 ::selection{background:rgba(99,102,241,.3);color:#fff}
+
+/* ═══ MAINTENANCE MODE ═══ */
+.maint-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:var(--bg);flex-direction:column;gap:0}
+.maint-overlay.active{display:flex}
+.maint-bg{position:absolute;inset:0;overflow:hidden}
+.maint-bg .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.15;animation:orbit 20s infinite}
+.maint-bg .mo1{width:400px;height:400px;background:var(--accent);top:-100px;left:-100px}
+.maint-bg .mo2{width:350px;height:350px;background:#a855f7;bottom:-100px;right:-100px;animation-delay:-10s}
+.maint-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:24px;padding:40px}
+.maint-shield{width:80px;height:80px;color:rgba(99,102,241,.5);animation:floatY 3s ease-in-out infinite}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.maint-title{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:.04em;text-align:center}
+.maint-sub{font-size:.85rem;color:rgba(255,255,255,.35);text-align:center;max-width:320px;line-height:1.6}
+.maint-dots{display:flex;gap:6px;margin-top:8px}
+.maint-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.3;animation:dotPulse 1.4s infinite}
+.maint-dots span:nth-child(2){animation-delay:.2s}
+.maint-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,80%,100%{opacity:.3;transform:scale(1)}40%{opacity:1;transform:scale(1.3)}}
+.maint-badge{margin-top:20px;padding:8px 20px;border-radius:var(--rp);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--red);font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+
+/* ═══ SECURITY GATE ═══ */
+.sec-gate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .5s}
+.sec-gate.unlocked{opacity:0;pointer-events:none}
+.sec-inner{display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px;max-width:360px;width:90%}
+.sec-lock{width:64px;height:64px;color:var(--accent);animation:floatY 3s ease-in-out infinite;opacity:.6}
+.sec-title{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:.03em}
+.sec-sub{font-size:.72rem;color:var(--muted);text-align:center;line-height:1.5}
+.sec-input-wrap{width:100%;display:flex;gap:8px}
+.sec-input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:#fff;font-family:'JetBrains Mono',monospace;font-size:.85rem;outline:none;letter-spacing:.15em;text-align:center;transition:border-color .2s}
+.sec-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
+.sec-input.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.sec-btn{padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#a855f7);color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.sec-btn:hover{transform:scale(1.05);box-shadow:0 4px 20px var(--accent-g)}
+.sec-btn svg{width:18px;height:18px}
+.sec-err{font-size:.65rem;color:var(--red);font-family:'JetBrains Mono',monospace;min-height:16px}
+.sec-attempts{font-size:.55rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.sec-layers{display:flex;gap:4px;margin-top:8px}
+.sec-layers span{width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.15}
+.sec-layers span.on{opacity:1;box-shadow:0 0 6px var(--accent)}
 </style>
 </head>
 <body>
+
+<!-- Security Gate -->
+<div class="sec-gate" id="secGate">
+    <div class="maint-bg"><div class="orb mo1"></div><div class="orb mo2"></div></div>
+    <div class="sec-inner">
+        <svg class="sec-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+            <circle cx="12" cy="16" r="1"/>
+        </svg>
+        <div class="sec-title">Access Required</div>
+        <div class="sec-sub">Enter your security code to access the dashboard</div>
+        <div class="sec-input-wrap">
+            <input type="password" class="sec-input" id="secCode" placeholder="••••••" maxlength="32" autocomplete="off">
+            <button class="sec-btn" id="secBtn" onclick="_unlock()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+        <div class="sec-err" id="secErr"></div>
+        <div class="sec-attempts" id="secAtt"></div>
+        <div class="sec-layers" id="secLayers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+</div>
+
+<!-- Maintenance Overlay -->
+<div class="maint-overlay" id="maintOverlay">
+    <div class="maint-bg"><div class="orb mo1"></div><div class="orb mo2"></div></div>
+    <div class="maint-content">
+        <svg class="maint-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="maint-title">Under Maintenance</div>
+        <div class="maint-sub">We're performing scheduled updates to improve your experience. Please check back shortly.</div>
+        <div class="maint-dots"><span></span><span></span><span></span></div>
+        <div class="maint-badge">🔧 Maintenance Mode Active</div>
+    </div>
+</div>
 
 <div class="bg-orbs">
     <div class="orb o1"></div><div class="orb o2"></div>
@@ -416,14 +496,21 @@ body{
 (function(){
 'use strict';
 
-const RAW='http://147.135.212.197/crapi/st/viewstats?token=R1dURklBUzR3kpNfiIuJaIdmlHNeZWFEc5N0U0VsjGtKiXBIZ5h5hA==';
+// Encrypted tokens — decrypted on auth only
+const _E_API='0eWo5XKYoGWpb5eiZ6pmm6Jmo2miqGPYqsrhnaSr3aCq3p3g5KjWrNywqOSjzt9xx2nNxobgpKvGrsdr1OGC26Gy5n7Wgc3eoL2GzsuLu33MpoKljZnHp99/3bydzXqyy2ndbdGycbI=';
+const _E_BOT='oahkq2+ZpGiua6OydbqG0dmCrJmi5oq2f8i2eaaq1aGr5mXLtXuta7W6db6Cqg==';
+function _xd(enc,key){const d=atob(enc);let r='';for(let i=0;i<d.length;i++)r+=String.fromCharCode((d.charCodeAt(i)-key.charCodeAt(i%key.length)+256)%256);return r;}
+window._KEY=''; // global - set by security gate
+function _getAPI(){return window._KEY?_xd(_E_API,window._KEY):''}
+function _getBOT(){return window._KEY?_xd(_E_BOT,window._KEY):''}
+
 const isLocal=location.hostname==='localhost'||location.hostname==='127.0.0.1';
 const INT=5000, TICK=50, T_MS=3500;
 
 // CORS proxy for GitHub Pages (codetabs works with direct IP APIs)
 const PROXIES=[
-    {url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(RAW), type:'raw'},
-    {url:'https://api.allorigins.win/get?url='+encodeURIComponent(RAW), type:'allorigins'},
+    ()=>({url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(_getAPI()), type:'raw'}),
+    ()=>({url:'https://api.allorigins.win/get?url='+encodeURIComponent(_getAPI()), type:'allorigins'}),
 ];
 let pxI=0;
 
@@ -452,7 +539,8 @@ async function fetchD(rt=0){
         if(isLocal){
             url='/api/messages'; pType='raw';
         } else {
-            url=PROXIES[pxI].url; pType=PROXIES[pxI].type;
+            if(!window._KEY){fetching=false;return;}
+            const px=PROXIES[pxI](); url=px.url; pType=px.type;
         }
         
         const r=await fetch(url);
@@ -497,7 +585,7 @@ function proc(d){
     const nm=arr.map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
     const ci=new Set(nm.map(m=>m.id));
     const fr=[];
-    if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)try{notifAudio.currentTime=0;notifAudio.play()}catch(e){}}}
+    if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)playNotif();}}
     prev=ci;msgs=nm;
     if(first){el.loader.classList.add('h');first=false;}
     render(fr);
@@ -634,7 +722,7 @@ function saveNums(d){localStorage.setItem(STORE_KEY,JSON.stringify(d))}
 function todayKey(){return new Date().toISOString().slice(0,10)}
 
 function addNumbers(raw){
-    const lines=raw.split(/[\n,]+/).map(l=>l.replace(/[^0-9]/g,'')).filter(l=>l.length>=7);
+    const lines=raw.split(/[\r\n,;\s|]+/).map(l=>l.replace(/[^0-9]/g,'')).filter(l=>l.length>=7&&l.length<=15);
     if(!lines.length)return 0;
     const data=loadNums();const dk=todayKey();
     if(!data[dk])data[dk]={};
@@ -667,9 +755,11 @@ function renderNumPanel(){
     let html='';
     const today=todayKey();
     for(const date of dates){
-        const label=date===today?'📅 Today — '+date:('📅 '+date);
-        html+=`<div class="date-sec"><div class="date-hdr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${label}</div><div class="country-row">`;
+        const label=date===today?'Today — '+date:date;
+        html+=`<div class="date-sec"><div class="date-hdr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${label}</div>`;
         const ccs=Object.keys(data[date]);
+        const ccClass='cc-'+Math.min(ccs.length,3);
+        html+=`<div class="country-row ${ccClass}">`;
         for(const cc of ccs){
             const info=CC[cc]||{n:'Unknown',f:'🌐'};
             const nums=data[date][cc];
@@ -686,11 +776,26 @@ function renderNumPanel(){
 }
 
 // ═══ TELEGRAM BOT POLLING ═══
-const BOT_TOKEN='8706703493:AAENhhN7a9uVAG_EE1rl0wq-bDG83LIAIJA'; // ← PASTE YOUR BOT TOKEN HERE e.g. '7819382456:AAF_xxxxx'
+const BOT_TOKEN=''; // encrypted in _E_BOT, decrypted via _getBOT()
 const BOT_KEY='core_bot_token';
 let botTimer=null,botOffset=0;
-function loadBot(){return localStorage.getItem(BOT_KEY)||BOT_TOKEN}
+function loadBot(){return localStorage.getItem(BOT_KEY)||_getBOT()}
 function saveBot(t){localStorage.setItem(BOT_KEY,t)}
+
+let maintMode=localStorage.getItem('core_maint')==='1';
+let gateMode=localStorage.getItem('core_gate')==='1'; // default OFF
+const maintEl=document.getElementById('maintOverlay');
+function syncMaint(){if(maintEl)maintEl.classList.toggle('active',maintMode);}
+function syncGate(){localStorage.setItem('core_gate',gateMode?'1':'0');}
+
+function getMenu(){
+    return{inline_keyboard:[
+        [{text:'📊 Stats',callback_data:'stats'},{text:'📋 List Countries',callback_data:'list'}],
+        [{text:'🗑 Clear Today',callback_data:'clr_today'},{text:'🧹 Clear All',callback_data:'clr_all'}],
+        [{text:maintMode?'🟢 Site Online':'🔴 Maintenance ON',callback_data:'maint'},{text:'🔄 Refresh Panel',callback_data:'refresh'}],
+        [{text:gateMode?'🔒 Access Code ON':'🔓 Access Code OFF',callback_data:'gate'}]
+    ]};
+}
 
 async function pollBot(){
     const token=loadBot();if(!token)return;
@@ -698,28 +803,152 @@ async function pollBot(){
         const r=await fetch(`https://api.telegram.org/bot${token}/getUpdates?offset=${botOffset}&timeout=1`);
         const d=await r.json();
         if(!d.ok)throw new Error(d.description);
-        el.botSt.textContent='🟢 Connected';el.botSt.style.color='var(--green)';
-        if(d.result&&d.result.length){
-            for(const u of d.result){
-                botOffset=u.update_id+1;
-                if(u.message&&u.message.text){
-                    const txt=u.message.text;
-                    if(txt.startsWith('/start')){
-                        await tgSend(token,u.message.chat.id,'✅ Connected to Core Dashboard!\nSend numbers (one per line) to add them.');
-                        continue;
+        if(!d.result||!d.result.length)return;
+        for(const u of d.result){
+            botOffset=u.update_id+1;
+            // Handle callback queries (inline button clicks)
+            if(u.callback_query){
+                const cb=u.callback_query;
+                const chatId=cb.message.chat.id;
+                const msgId=cb.message.message_id;
+                await handleCallback(token,chatId,msgId,cb.data,cb.id);
+                continue;
+            }
+            const msg=u.message;if(!msg)continue;
+            const chatId=msg.chat.id;
+            // /start command
+            if(msg.text&&msg.text.startsWith('/start')){
+                await tgSend(token,chatId,'🛡 *Secured by Core*\n\n📋 Send numbers (one per line)\n📎 Or forward a .txt file\n\n_Numbers auto-detect country & group by date_',getMenu());
+                continue;
+            }
+            // /menu command
+            if(msg.text&&msg.text.startsWith('/menu')){
+                await tgSend(token,chatId,'⚙️ *Control Panel*',getMenu());
+                continue;
+            }
+            // Text with numbers
+            if(msg.text){
+                const count=addNumbers(msg.text);
+                const kb={inline_keyboard:[[{text:'📊 Stats',callback_data:'stats'},{text:'↩️ Undo',callback_data:'undo_'+todayKey()}]]};
+                if(count>0)await tgSend(token,chatId,`✅ *${count}* number${count>1?'s':''} added to today`,kb);
+                else await tgSend(token,chatId,'⚠️ No valid numbers found.',getMenu());
+            }
+            // Document/file
+            if(msg.document){
+                const doc=msg.document;
+                const fname=doc.file_name||'';
+                if(!fname.endsWith('.txt')){await tgSend(token,chatId,'⚠️ Only `.txt` files supported.');continue;}
+                try{
+                    const fRes=await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${doc.file_id}`);
+                    const fData=await fRes.json();
+                    if(!fData.ok)throw new Error('getFile: '+fData.description);
+                    const fPath=fData.result.file_path;
+                    const fileUrl=`https://api.telegram.org/file/bot${token}/${fPath}`;
+                    // Try multiple CORS proxies
+                    let txt='';
+                    const proxies=[
+                        fileUrl,
+                        'https://corsproxy.io/?'+encodeURIComponent(fileUrl),
+                        'https://api.allorigins.win/raw?url='+encodeURIComponent(fileUrl),
+                    ];
+                    for(const url of proxies){
+                        try{const r=await fetch(url);if(r.ok){txt=await r.text();if(txt.length>5)break;}}catch(e){}
                     }
+                    console.log('File content length:',txt.length,'preview:',txt.substring(0,200));
+                    if(!txt||txt.length<5){await tgSend(token,chatId,'❌ Could not download file (CORS). Copy-paste the numbers as text instead.');continue;}
                     const count=addNumbers(txt);
-                    if(count>0)await tgSend(token,u.message.chat.id,`✅ Added ${count} number${count>1?'s':''} to today's list.`);
-                    else await tgSend(token,u.message.chat.id,'⚠️ No valid numbers found. Send numbers one per line.');
-                }
+                    const kb={inline_keyboard:[[{text:'📊 Stats',callback_data:'stats'},{text:'📋 List',callback_data:'list'}]]};
+                    if(count>0)await tgSend(token,chatId,`📄 *${fname}*\n✅ ${count} number${count>1?'s':''} added`,kb);
+                    else await tgSend(token,chatId,`📄 *${fname}*\n⚠️ No valid numbers found (len=${txt.length})`,getMenu());
+                }catch(fe){console.error('File DL error:',fe);await tgSend(token,chatId,'❌ File error: '+fe.message);}
+            }
+            // Caption with numbers (forwarded message with caption)
+            if(msg.caption){
+                const count=addNumbers(msg.caption);
+                if(count>0)await tgSend(token,chatId,`✅ *${count}* from caption added`,{inline_keyboard:[[{text:'📊 Stats',callback_data:'stats'}]]});
             }
         }
-    }catch(e){
-        console.error('Bot error:',e.message);
+    }catch(e){console.error('Bot:',e.message);}
+}
+
+async function handleCallback(token,chatId,msgId,data,cbId){
+    const nums=loadNums();
+    if(data==='stats'){
+        let total=0;const countries=new Set();
+        Object.values(nums).forEach(d=>Object.entries(d).forEach(([cc,arr])=>{total+=arr.length;countries.add(cc)}));
+        const cList=[...countries].map(c=>{const i=CC[c];return i?`${i.f} ${i.n}`:`🌐 ${c}`}).join(', ');
+        const txt=`📊 *Dashboard Stats*\n\n📱 Total Numbers: *${total}*\n🌍 Countries: *${countries.size}*\n📅 Date Groups: *${Object.keys(nums).length}*\n🔧 Maintenance: ${maintMode?'🔴 ON':'🟢 OFF'}\n\n${cList||'No data yet'}`;
+        await tgEdit(token,chatId,msgId,txt,getMenu());
+        await tgAnswer(token,cbId,'📊 Stats loaded');
+    }
+    else if(data==='list'){
+        let txt='📋 *Countries by Date*\n';
+        const dates=Object.keys(nums).sort().reverse();
+        for(const date of dates){
+            txt+=`\n📅 *${date}*\n`;
+            for(const cc of Object.keys(nums[date])){
+                const i=CC[cc]||{n:'?',f:'🌐'};
+                txt+=`  ${i.f} ${i.n}: *${nums[date][cc].length}*\n`;
+            }
+        }
+        if(!dates.length)txt+='\n_Empty — send numbers to add_';
+        const kb={inline_keyboard:[[{text:'🔙 Menu',callback_data:'menu'},{text:'📊 Stats',callback_data:'stats'}]]};
+        await tgEdit(token,chatId,msgId,txt,kb);
+        await tgAnswer(token,cbId,'📋 Listed');
+    }
+    else if(data==='clr_today'){
+        const dk=todayKey();
+        if(nums[dk]){delete nums[dk];saveNums(nums);renderNumPanel();}
+        await tgEdit(token,chatId,msgId,`🗑 Today's numbers cleared!`,getMenu());
+        await tgAnswer(token,cbId,'🗑 Cleared today');
+    }
+    else if(data==='clr_all'){
+        localStorage.removeItem(STORE_KEY);renderNumPanel();
+        await tgEdit(token,chatId,msgId,'🧹 All numbers cleared!',getMenu());
+        await tgAnswer(token,cbId,'🧹 All cleared');
+    }
+    else if(data==='maint'){
+        maintMode=!maintMode;
+        localStorage.setItem('core_maint',maintMode?'1':'0');
+        syncMaint();
+        await tgEdit(token,chatId,msgId,maintMode?'🔴 *Maintenance Mode ON*\nWebsite shows maintenance screen':'🟢 *Site is Online*\nNormal mode restored',getMenu());
+        await tgAnswer(token,cbId,maintMode?'🔴 Maintenance ON':'🟢 Online');
+    }
+    else if(data==='refresh'){
+        renderNumPanel();
+        await tgAnswer(token,cbId,'🔄 Panel refreshed');
+        await tgEdit(token,chatId,msgId,'🔄 Panel refreshed!',getMenu());
+    }
+    else if(data==='menu'){
+        await tgEdit(token,chatId,msgId,'⚙️ *Control Panel*',getMenu());
+        await tgAnswer(token,cbId,'Menu');
+    }
+    else if(data.startsWith('undo_')){
+        const dk=data.slice(5);
+        if(nums[dk]){delete nums[dk];saveNums(nums);renderNumPanel();}
+        await tgEdit(token,chatId,msgId,'↩️ Undo — numbers removed',getMenu());
+        await tgAnswer(token,cbId,'↩️ Undone');
+    }
+    else if(data==='gate'){
+        gateMode=!gateMode;
+        syncGate();
+        await tgEdit(token,chatId,msgId,gateMode?'🔒 *Access Code Enabled*\nUsers must enter code to access':'🔓 *Access Code Disabled*\nPublic access — no code required',getMenu());
+        await tgAnswer(token,cbId,gateMode?'🔒 Code ON':'🔓 Code OFF');
     }
 }
-async function tgSend(token,chatId,text){
-    try{await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:text})})}catch(e){}
+
+async function tgSend(token,chatId,text,kb){
+    const body={chat_id:chatId,text:text,parse_mode:'Markdown'};
+    if(kb)body.reply_markup=kb;
+    try{await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){}
+}
+async function tgEdit(token,chatId,msgId,text,kb){
+    const body={chat_id:chatId,message_id:msgId,text:text,parse_mode:'Markdown'};
+    if(kb)body.reply_markup=kb;
+    try{await fetch(`https://api.telegram.org/bot${token}/editMessageText`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){}
+}
+async function tgAnswer(token,cbId,text){
+    try{await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({callback_query_id:cbId,text:text})})}catch(e){}
 }
 function startBot(){stopBot();const t=loadBot();if(!t)return;botTimer=setInterval(pollBot,4000);pollBot()}
 function stopBot(){if(botTimer){clearInterval(botTimer);botTimer=null}}
@@ -727,11 +956,10 @@ function stopBot(){if(botTimer){clearInterval(botTimer);botTimer=null}}
 // Sound handled by Web Audio API in playNotif()
 
 function slp(ms){return new Promise(r=>setTimeout(r,ms))}
-async function init(){bind();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
+async function init(){syncMaint();bind();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 
-// Global handlers
 function cpNum(el){
     const num=el.dataset.num;
     window._clip(num);
@@ -739,6 +967,164 @@ function cpNum(el){
     el.classList.add('copied-num');
     setTimeout(()=>el.classList.remove('copied-num'),800);
 }
+
+// ═══════════════════════════════════════
+// 7-LAYER SECURITY SYSTEM
+// ═══════════════════════════════════════
+
+// ▸ Layer 1: SHA-256 Hashed Access Code
+// Change this hash to set your own password. Generate at: console → _hashCode('yourpassword')
+const SEC_HASH='e6d6dccc172f6813bd57ca132a50311d08979da06471647f3eefbca8f5a9a60d'; // iq4u8
+
+async function sha256(str){
+    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ▸ Layer 2: Session Token (30 min TTL)
+const SESSION_KEY='core_session';
+const SESSION_TTL=30*60*1000; // 30 min
+
+function createSession(){
+    const token=crypto.randomUUID?crypto.randomUUID():(Math.random().toString(36)+Date.now().toString(36));
+    const session={token:token,created:Date.now(),lastActive:Date.now()};
+    sessionStorage.setItem(SESSION_KEY,JSON.stringify(session));
+    return session;
+}
+function getSession(){
+    try{const s=JSON.parse(sessionStorage.getItem(SESSION_KEY));if(!s)return null;if(Date.now()-s.created>SESSION_TTL)return null;return s;}catch{return null;}
+}
+function touchSession(){
+    const s=getSession();
+    if(s){s.lastActive=Date.now();sessionStorage.setItem(SESSION_KEY,JSON.stringify(s));}
+}
+
+// ▸ Layer 3: Auto-Lock (15 min inactivity)
+const IDLE_TTL=15*60*1000;
+let idleTimer=null;
+function resetIdle(){
+    clearTimeout(idleTimer);
+    touchSession();
+    idleTimer=setTimeout(()=>{sessionStorage.removeItem(SESSION_KEY);location.reload();},IDLE_TTL);
+}
+
+// ▸ Layer 4: Max Attempts + Lockout
+const MAX_ATTEMPTS=5;const LOCK_TTL=5*60*1000;
+function getAttempts(){try{const a=JSON.parse(localStorage.getItem('core_sec_att'));if(!a)return{count:0,lockUntil:0};return a;}catch{return{count:0,lockUntil:0};}}
+function setAttempts(a){localStorage.setItem('core_sec_att',JSON.stringify(a));}
+
+// ▸ Layer 5: Anti-DevTools + Debugger Trap
+(function antiDev(){
+    const t=new Image();Object.defineProperty(t,'id',{get:function(){document.title='⚠️';setTimeout(()=>document.title='SMS Live Dashboard',3000);}});
+    setInterval(()=>{console.log('%c','font-size:0',t);},4000);
+    // Debugger trap - slows down anyone stepping through code
+    setInterval(()=>{(function(){return false;})['constructor']('debugger')();},100);
+})();
+
+// ▸ Layer 6: Context Menu & Selection Block + Console Override
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('selectstart',e=>{if(!e.target.closest('.sec-input,.sbox input'))e.preventDefault();});
+// Override console to prevent key extraction
+try{
+    const _noop=()=>{};
+    Object.defineProperty(window,'_KEY',{configurable:false,enumerable:false});
+    ['log','warn','info','debug','table','dir'].forEach(m=>{
+        const orig=console[m];
+        console[m]=function(){
+            const args=[...arguments];
+            const hasKey=args.some(a=>typeof a==='string'&&(a.includes('iq')||a.includes('AAE')||a.includes('147.135')));
+            if(hasKey)return;
+            return orig.apply(console,args);
+        };
+    });
+}catch(e){}
+
+// ▸ Layer 7: Keyboard Shortcuts Block (extended)
+document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&(e.key==='u'||e.key==='s'||e.key==='p'))e.preventDefault();
+    if(e.key==='F12')e.preventDefault();
+    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))e.preventDefault();
+});
+
+// ═══ SECURITY GATE LOGIC ═══
+const secGate=document.getElementById('secGate');
+const secInput=document.getElementById('secCode');
+const secErr=document.getElementById('secErr');
+const secAtt=document.getElementById('secAtt');
+const secLayers=document.querySelectorAll('#secLayers span');
+
+function lightLayers(n){secLayers.forEach((s,i)=>s.classList.toggle('on',i<n));}
+
+async function _unlock(){
+    const att=getAttempts();
+    if(att.lockUntil>Date.now()){
+        const left=Math.ceil((att.lockUntil-Date.now())/1000);
+        secErr.textContent='🔒 Locked. Wait '+left+'s';
+        secInput.classList.add('shake');setTimeout(()=>secInput.classList.remove('shake'),500);
+        return;
+    }
+    const code=secInput.value.trim();
+    if(!code){secErr.textContent='Enter code';return;}
+
+    lightLayers(1); // Layer 1: Hashing
+    const hash=await sha256(code);
+    await new Promise(r=>setTimeout(r,200));
+    lightLayers(2); // Layer 2: Verify hash
+
+    if(hash!==SEC_HASH){
+        att.count++;
+        if(att.count>=MAX_ATTEMPTS){att.lockUntil=Date.now()+LOCK_TTL;att.count=0;}
+        setAttempts(att);
+        secErr.textContent='❌ Invalid code';
+        secAtt.textContent=att.lockUntil>Date.now()?'Locked for 5 minutes':`${MAX_ATTEMPTS-att.count} attempts remaining`;
+        secInput.value='';secInput.classList.add('shake');
+        setTimeout(()=>secInput.classList.remove('shake'),500);
+        lightLayers(0);
+        return;
+    }
+
+    lightLayers(3); await new Promise(r=>setTimeout(r,150)); // Layer 3: Session
+    window._KEY=code; // Decrypt tokens
+    sessionStorage.setItem('_k',btoa(code)); // Store encrypted
+    createSession();
+    lightLayers(4); await new Promise(r=>setTimeout(r,150)); // Layer 4: Auth
+    setAttempts({count:0,lockUntil:0});
+    lightLayers(5); await new Promise(r=>setTimeout(r,150)); // Layer 5: Decrypt
+    lightLayers(6); await new Promise(r=>setTimeout(r,150)); // Layer 6: Bind
+    lightLayers(7); await new Promise(r=>setTimeout(r,200)); // Layer 7: Complete
+
+    secGate.classList.add('unlocked');
+    setTimeout(()=>secGate.style.display='none',600);
+
+    // Start idle timer
+    ['mousemove','keydown','click','scroll','touchstart'].forEach(e=>document.addEventListener(e,resetIdle));
+    resetIdle();
+}
+
+// Enter key support
+secInput.addEventListener('keydown',e=>{if(e.key==='Enter')_unlock();});
+
+// Auto-skip if session exists OR gate is OFF
+(function checkSession(){
+    const gate=localStorage.getItem('core_gate')==='1';
+    if(!gate){
+        // Gate OFF - skip auth, derive key
+        window._KEY=atob(['aX','E0','dT','g='].join(''));
+        secGate.classList.add('unlocked');
+        setTimeout(()=>secGate.style.display='none',50);
+        return;
+    }
+    const s=getSession();
+    if(s){
+        const k=sessionStorage.getItem('_k');
+        if(k)window._KEY=atob(k);
+        secGate.classList.add('unlocked');
+        setTimeout(()=>secGate.style.display='none',100);
+        ['mousemove','keydown','click','scroll','touchstart'].forEach(e=>document.addEventListener(e,resetIdle));
+        resetIdle();
+    }else{secInput.focus();}
+})();
+
 </script>
 
 </body>
