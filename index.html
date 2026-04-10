@@ -406,7 +406,11 @@ body{
 (function(){
 'use strict';
 
-const API='/api/messages';
+const RAW='http://147.135.212.197/crapi/st/viewstats?token=R1dURklBUzR3kpNfiIuJaIdmlHNeZWFEc5N0U0VsjGtKiXBIZ5h5hA==';
+const isLocal=location.hostname==='localhost'||location.hostname==='127.0.0.1';
+const PROXIES=['https://corsproxy.io/?'+encodeURIComponent(RAW),'https://api.allorigins.win/raw?url='+encodeURIComponent(RAW)];
+let proxyIdx=0;
+const API=isLocal?'/api/messages':PROXIES[0];
 const INT=5000, TICK=50, T_MS=3500;
 
 let msgs=[],prev=new Set(),rCnt=0,filter='all',query='',first=true,fetching=false,snd=false;
@@ -429,17 +433,28 @@ const MS_I='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 
 async function fetchD(rt=0){
     if(fetching)return;fetching=true;
+    // Pick URL: local proxy or current CORS proxy
+    let url=isLocal?'/api/messages':PROXIES[proxyIdx];
     try{
-        const r=await fetch(API);
+        const r=await fetch(url);
         if(!r.ok)throw new Error('HTTP '+r.status);
         const t=await r.text();
         if(t.includes('too many')||t.includes('Error')){
-            if(rt<3){fetching=false;await slp(2000);return fetchD(rt+1);}
+            if(rt<3){fetching=false;await slp(5500);return fetchD(rt+1);}
             throw new Error('Rate limited');
         }
         proc(JSON.parse(t));
         setSt('live','Live');
-    }catch(e){console.error(e);setSt('error','Error');if(first)toast('error','Connection failed');}
+    }catch(e){
+        console.error(e);
+        // Try next CORS proxy on production
+        if(!isLocal&&PROXIES.length>1){
+            proxyIdx=(proxyIdx+1)%PROXIES.length;
+            console.log('Switching to proxy:',proxyIdx);
+        }
+        setSt('error','Retrying...');
+        if(first&&rt>=2)toast('error','Connection failed');
+    }
     finally{fetching=false;rCnt++;upStats();}
 }
 
