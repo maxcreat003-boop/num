@@ -407,7 +407,7 @@ body{
 'use strict';
 
 const API='/api/messages';
-const INT=4000, TICK=50, T_MS=3500;
+const INT=5000, TICK=50, T_MS=3500;
 
 let msgs=[],prev=new Set(),rCnt=0,filter='all',query='',first=true,fetching=false,snd=false;
 let rT,pT,pV=0;
@@ -444,8 +444,13 @@ async function fetchD(rt=0){
 }
 
 function proc(d){
-    if(!d||!d.value||!Array.isArray(d.value))return;
-    const nm=d.value.map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
+    // Handle both formats: plain array [[...]] or {value:[[...]]}
+    let arr;
+    if(Array.isArray(d)) arr=d;
+    else if(d&&d.value&&Array.isArray(d.value)) arr=d.value;
+    else return;
+    if(!arr.length) return;
+    const nm=arr.map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
     const ci=new Set(nm.map(m=>m.id));
     const fr=[];
     if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)beep();}}
