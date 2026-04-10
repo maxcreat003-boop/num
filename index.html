@@ -310,16 +310,6 @@ body{
 .lp-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
 .lp-title{font-size:1.1rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
 .lp-count{padding:2px 8px;border-radius:var(--rp);background:var(--glass);border:1px solid var(--border);font-size:.65rem;font-weight:600;color:var(--accent);font-family:'JetBrains Mono',monospace}
-.lp-acts{display:flex;gap:6px}
-.bot-cfg,.add-cfg{padding:10px 14px;border-radius:10px;background:var(--glass);border:1px solid var(--border);margin-bottom:10px;flex-shrink:0}
-.bot-input,.add-ta{width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.3);color:#fff;font-family:'JetBrains Mono',monospace;font-size:.75rem;outline:none;margin-bottom:8px;resize:none}
-.bot-input:focus,.add-ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
-.bot-row{display:flex;align-items:center;gap:10px}
-.bot-st{font-size:.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-.btn-sm{padding:6px 14px;border-radius:8px;border:none;font-size:.72rem;font-weight:600;cursor:pointer;transition:all var(--base);font-family:'Inter',sans-serif}
-.btn-sm.green{background:rgba(16,185,129,.2);color:var(--green);border:1px solid rgba(16,185,129,.3)}
-.btn-sm.green:hover{background:rgba(16,185,129,.35)}
-.btn-sm.red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.25)}
 .date-sec{margin-bottom:16px}
 .date-hdr{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .date-hdr svg{width:13px;height:13px;color:var(--accent)}
@@ -354,12 +344,11 @@ body{
 </div>
 
 <div class="layout">
-    <!-- LEFT PANEL — Number Management -->
+    <!-- LEFT PANEL -->
     <div class="left-panel" id="leftPanel">
         <div class="lp-bar">
             <div class="lp-title">Numbers <span class="lp-count" id="numCount">0</span></div>
         </div>
-        <!-- Number Groups render here -->
         <div class="num-groups" id="numGroups"></div>
     </div>
 
@@ -387,7 +376,13 @@ body{
                 </div>
             </div>
 
-
+            <!-- Mini Stats -->
+            <div class="stats-row">
+                <div class="st-card"><span class="sv" id="sT">0</span><span class="sl">Messages</span></div>
+                <div class="st-card"><span class="sv" id="sL">--:--</span><span class="sl">Latest</span></div>
+                <div class="st-card"><span class="sv" id="sS">--</span><span class="sl">Source</span></div>
+                <div class="st-card"><span class="sv" id="sR">0</span><span class="sl">Refreshes</span></div>
+            </div>
 
             <!-- Search + Filters -->
             <div class="search-row">
@@ -511,7 +506,7 @@ function proc(d){
     const nm=arr.slice(0,25).map((v,i)=>({id:v[1]+'_'+v[3],src:v[0]||'?',phone:v[1]||'',body:v[2]||'',ts:v[3]||'',idx:i}));
     const ci=new Set(nm.map(m=>m.id));
     const fr=[];
-    if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)beep();}}
+    if(!first){for(const m of nm)if(!prev.has(m.id))fr.push(m.id);if(fr.length){toast('success',fr.length+' new message'+(fr.length>1?'s':'')+'!');if(snd)try{notifAudio.currentTime=0;notifAudio.play()}catch(e){}}}
     prev=ci;msgs=nm;
     if(first){el.loader.classList.add('h');first=false;}
     render(fr);
@@ -562,7 +557,7 @@ const ICO={
     error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ti"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
 };
 function toast(type,msg){const t=document.createElement('div');t.className='toast '+type;t.innerHTML=(ICO[type]||ICO.info)+'<span>'+msg+'</span>';el.toasts.appendChild(t);setTimeout(()=>{t.classList.add('tO');setTimeout(()=>t.remove(),300)},T_MS)}
-function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)();const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;o.type='sine';g.gain.setValueAtTime(.1,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.3);o.start(c.currentTime);o.stop(c.currentTime+.3)}catch(e){}}
+function playNotif(){try{notifAudio.currentTime=0;notifAudio.play()}catch(e){}}
 function clip(t){if(navigator.clipboard)navigator.clipboard.writeText(t);else{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.left='-9999px';document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a)}}
 function onCp(e){e.stopPropagation();clip(e.currentTarget.dataset.v);toast('success','Copied!');fl(e)}
 function onCpC(e){e.stopPropagation();const c=e.currentTarget.dataset.v;clip(c);toast('success','Code '+c+' copied!');fl(e)}
@@ -575,7 +570,7 @@ function manR(){el.refBtn.classList.add('spin');setTimeout(()=>el.refBtn.classLi
 
 function bind(){
     el.refBtn.addEventListener('click',manR);
-    el.sndBtn.addEventListener('click',()=>{snd=!snd;el.sndBtn.style.color=snd?'var(--green)':'';toast('info',snd?'Sound ON':'Sound OFF');if(snd)beep()});
+    el.sndBtn.addEventListener('click',()=>{snd=!snd;el.sndBtn.style.color=snd?'var(--green)':'';toast('info',snd?'Sound ON':'Sound OFF');if(snd)playNotif()});
     el.sIn.addEventListener('input',e=>{query=e.target.value.trim();render()});
     document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();el.sIn.focus()}if(e.key==='Escape'){el.sIn.blur();el.sIn.value='';query='';render()}});
     el.pills.forEach(p=>{p.addEventListener('click',()=>{el.pills.forEach(x=>x.classList.remove('active'));p.classList.add('active');filter=p.dataset.f;render()})});
@@ -708,7 +703,6 @@ async function pollBot(){
         }
     }catch(e){
         console.error('Bot error:',e.message);
-        el.botSt.textContent='🔴 Error';el.botSt.style.color='var(--red)';
     }
 }
 async function tgSend(token,chatId,text){
@@ -717,26 +711,12 @@ async function tgSend(token,chatId,text){
 function startBot(){stopBot();const t=loadBot();if(!t)return;botTimer=setInterval(pollBot,4000);pollBot()}
 function stopBot(){if(botTimer){clearInterval(botTimer);botTimer=null}}
 
-// ═══ LEFT PANEL BINDINGS ═══
-function bindLP(){
-    el.addBtn.addEventListener('click',()=>{el.addCfg.classList.toggle('h');el.botCfg.classList.add('h')});
-    el.botBtn.addEventListener('click',()=>{el.botCfg.classList.toggle('h');el.addCfg.classList.add('h');el.botToken.value=loadBot()});
-    el.addSave.addEventListener('click',()=>{
-        const txt=el.addNums.value.trim();
-        if(!txt){toast('error','Paste numbers first');return;}
-        const c=addNumbers(txt);
-        toast('success',c+' number'+(c>1?'s':'')+' added!');
-        el.addNums.value='';el.addCfg.classList.add('h');
-    });
-    el.botSave.addEventListener('click',()=>{
-        const t=el.botToken.value.trim();
-        if(!t){toast('error','Enter bot token');return;}
-        saveBot(t);startBot();toast('success','Bot connected!');
-    });
-}
+// WAV notification sound
+const notifAudio=new Audio('mixkit-sci-fi-click-900.wav');
+notifAudio.volume=0.5;
 
 function slp(ms){return new Promise(r=>setTimeout(r,ms))}
-async function init(){bind();bindLP();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
+async function init(){bind();renderNumPanel();setSt('','Connecting...');await fetchD();startR();toast('info','Live — auto-refresh 5s');if(loadBot())startBot();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 
